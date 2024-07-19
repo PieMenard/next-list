@@ -1,4 +1,5 @@
 import { List } from '@prisma/client';
+import ListCard from './ListCard';
 
 async function getListData() {
   const fetchList = await fetch('http://localhost:3000/api/list', {
@@ -17,9 +18,11 @@ async function getListData() {
 const ListShow = async () => {
   const listData = await getListData();
   return (
-    <div>
+    <div className="flex flex-wrap gap-5 mt-6">
       {listData.map((list: List) => (
-        <div key={list.id}>{list.title}</div>
+        <div key={list.id} className="mx-auto">
+          <ListCard list={list} />
+        </div>
       ))}
     </div>
   );
