@@ -26,3 +26,37 @@ export async function POST(req: any) {
 
     }
 }
+
+//GET ALL request
+export async function GET() {
+    try {
+        const allList = await prisma.list.findMany({
+            select: {
+                title: true,
+                description: true,
+                id: true
+            },
+            orderBy: {
+                createdAt: 'desc'
+            }
+        })
+
+        if (allList) {
+            return NextResponse.json({
+                success: true,
+                data: allList
+            })
+        } else {
+            return NextResponse.json({
+                success: false,
+                message: 'An error ocurred.'
+            })
+        }
+    } catch (error) {
+        return NextResponse.json({
+            success: false,
+            message: error
+        })
+
+    }
+}
