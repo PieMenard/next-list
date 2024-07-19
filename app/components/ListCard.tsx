@@ -21,14 +21,32 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { List } from '@prisma/client';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 const ListCard = ({ list }: { list: List }) => {
+  const router = useRouter();
   const [openListDialog, setOpenListDialog] = useState(false);
   const [editData, setEditData] = useState({
     title: list.title,
     description: list.description,
   });
+
+  async function handleEdit() {
+    try {
+      const apiResponse = await fetch(`/api/list?id=${list.id}`, {
+        method: 'PUT',
+        body: JSON.stringify(editData),
+      });
+      const result = await apiResponse.json();
+      setOpenListDialog(false);
+      if (result.success) {
+        router.refresh();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <div>
@@ -74,7 +92,7 @@ const ListCard = ({ list }: { list: List }) => {
                 </div>
               </div>
               <DialogFooter>
-                <Button type="submit" onClick={() => handleEdit()}>
+                <Button type="submit" onClick={handleEdit}>
                   Save changes
                 </Button>
               </DialogFooter>

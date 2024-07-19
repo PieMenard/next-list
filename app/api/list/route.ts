@@ -60,3 +60,43 @@ export async function GET() {
 
     }
 }
+
+
+//POST request
+export async function PUT(req: any) {
+    const { searchParams } = new URL(req.url);
+    const currentListId = searchParams.get('id');
+
+    if (!currentListId) {
+        return NextResponse.json({
+            success: false,
+            message: 'Invalid ID'
+        });
+    }
+    const data = await req.json()
+
+    try {
+        const updatedList = await prisma.list.update({
+            where: {
+                id: currentListId,
+            },
+            data: {
+                title: data.title,
+                description: data.description
+            }
+        })
+
+        if (updatedList) {
+            return NextResponse.json({
+                success: true,
+                message: 'Updated data successfully'
+            })
+        }
+    } catch (error) {
+        return NextResponse.json({
+            success: false,
+            message: error
+        })
+
+    }
+}
