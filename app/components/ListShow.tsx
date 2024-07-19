@@ -19,7 +19,7 @@ const ListShow = async () => {
   return (
     <div>
       {listData.map((list: List) => (
-        <div>{list.title}</div>
+        <div key={list.id}>{list.title}</div>
       ))}
     </div>
   );
