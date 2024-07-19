@@ -1,7 +1,9 @@
+import ListBox from './components/ListBox';
+
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      Home
+    <main className="flex flex-col w-8/12 mx-auto justify-between p-10">
+      <ListBox />
     </main>
   );
 }
