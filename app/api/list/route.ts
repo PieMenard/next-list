@@ -100,3 +100,36 @@ export async function PUT(req: any) {
 
     }
 }
+
+//DELETE request
+export async function DELETE(req: any) {
+    const { searchParams } = new URL(req.url);
+    const currentListId = searchParams.get('id');
+
+    if (!currentListId) {
+        return NextResponse.json({
+            success: false,
+            message: 'Invalid ID'
+        });
+    }
+
+    try {
+        const deleteList = await prisma.list.delete({
+            where: {
+                id: currentListId,
+            },
+        });
+        if (deleteList) {
+            return NextResponse.json({
+                success: true,
+                message: 'deleted data successfully'
+            })
+        }
+    } catch (error) {
+        return NextResponse.json({
+            success: false,
+            message: error
+        })
+    }
+
+}

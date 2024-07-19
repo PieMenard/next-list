@@ -48,6 +48,20 @@ const ListCard = ({ list }: { list: List }) => {
     }
   }
 
+  async function handleDelete() {
+    try {
+      const apiResponse = await fetch(`/api/list?id=${list.id}`, {
+        method: 'DELETE',
+      });
+      const result = await apiResponse.json();
+
+      if (result.success) {
+        router.refresh();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
   return (
     <div>
       <Card className="w-[300px] h-auto bg-gray-950 text-white">
@@ -99,7 +113,9 @@ const ListCard = ({ list }: { list: List }) => {
             </DialogContent>
           </Dialog>
           {/*Delete Button*/}
-          <Button variant="destructive">Delete</Button>
+          <Button variant="destructive" onClick={handleDelete}>
+            Delete
+          </Button>
         </CardContent>
       </Card>
     </div>
