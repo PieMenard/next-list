@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 const ListBox = () => {
   const router = useRouter();
@@ -9,17 +9,26 @@ const ListBox = () => {
     title: '',
     description: '',
   });
-
+  const formRef = useRef<HTMLFormElement>(null);
   async function handleSubmit(e: any) {
     e.preventDefault();
+
     //fetch API POST
     try {
       const apiResponse = await fetch('/api/list', {
         method: 'POST',
         body: JSON.stringify(formData),
       });
+
       const result = await apiResponse.json();
+
       if (result.success) {
+        formRef.current?.reset();
+        //reset form
+        setFormData({
+          title: '',
+          description: '',
+        });
         router.refresh();
       }
     } catch (error) {
@@ -29,7 +38,11 @@ const ListBox = () => {
 
   return (
     <div>
-      <form onSubmit={handleSubmit} className="flex flex-col item">
+      <form
+        ref={formRef}
+        onSubmit={handleSubmit}
+        className="flex flex-col item"
+      >
         <label htmlFor="title">Title</label>
         <input
           onChange={(e) => setFormData({ ...formData, title: e.target.value })}
